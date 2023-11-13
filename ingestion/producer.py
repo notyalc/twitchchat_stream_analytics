@@ -17,13 +17,18 @@ nickname = os.environ.get('NICKNAME')
 token = os.environ.get('TOKEN')
 channel = '#scarra'
 
+def parse_resp(s, keys = ['user', 'type', 'host']):
+    d = dict((key, value.lstrip(':')) for key, value in zip(keys, s.split()))
+    d['message'] = s.split(' :')[1].split('\r\n')[0]
+    return d
+
 def get_twitch_stream():
     sock = socket.socket()
     sock.connect((server, port))
     sock.send(f"PASS {token}\r\n".encode())
     sock.send(f"NICK {nickname}\r\n".encode())
     sock.send(f"JOIN {channel}\r\n".encode())
-    resp = sock.recv(2048).decode('utf-8')  
+    resp = sock.recv(2048).decode('utf-8')
 
     try:
         while True:
@@ -32,9 +37,8 @@ def get_twitch_stream():
             elif len(resp) > 0:
                 resp = sock.recv(2048).decode('utf-8')  
                 resp_str = demojize(resp).encode('utf-8').decode('utf-8')
-                print(resp)
                 producer.send(topic="twitch_chat", value=resp_str)
-
+                
     except KeyboardInterrupt:
         sock.close()
         exit()
