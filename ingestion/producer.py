@@ -19,6 +19,7 @@ token = os.environ.get('TOKEN')
 channel = '#shroud' # Change the channel to choose one of choice. 
 
 def parse_resp(s, keys=['user', 'type', 'host']):
+    """Parse twitch response and extract username from response"""
     parts = s.split(' ')
     username = parts[0].lstrip(':').split('!')[0]  # Extract only the username
 
@@ -31,6 +32,7 @@ def parse_resp(s, keys=['user', 'type', 'host']):
 print(parse_resp(":ranran46!ranran46@ranran46.tmi.twitch.tv PRIVMSG #scarra :Gnar is such an underrated carry\r\n"))
 
 def get_twitch_stream():
+    """ Create connection to twitch to receive messages real time"""
     sock = socket.socket()
     sock.connect((server, port))
     sock.send(f"PASS {token}\r\n".encode())
