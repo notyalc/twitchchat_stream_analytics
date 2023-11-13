@@ -15,8 +15,7 @@ server = os.environ.get('SERVER')
 port = int(os.environ.get('PORT'))
 nickname = os.environ.get('NICKNAME')
 token = os.environ.get('TOKEN')
-
-channel = '#boxbox'
+channel = '#scarra'
 
 def get_twitch_stream():
     sock = socket.socket()
@@ -33,8 +32,9 @@ def get_twitch_stream():
             elif len(resp) > 0:
                 resp = sock.recv(2048).decode('utf-8')  
                 resp_str = demojize(resp).encode('utf-8').decode('utf-8')
+                print(resp)
                 producer.send(topic="twitch_chat", value=resp_str)
-                
+
     except KeyboardInterrupt:
         sock.close()
         exit()
