@@ -27,9 +27,9 @@ def senti_menti(twitch_message: dict):
     return sentiment_result
 
 #Testing if function returns correct values"
-# msg = {
-#     'user': 'boxbag',
-#     'message': 'Gnar is such an underrated carry'
-# }
+msg = {
+    'user': 'boxbag',
+    'message': 'Gnar is such an underrated carry'
+}
 
-# print(senti_menti(msg))
+print(senti_menti(msg))
