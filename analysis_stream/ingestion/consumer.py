@@ -1,27 +1,23 @@
-from kafka import KafkaConsumer
-from kafka import KafkaProducer
+from kafka import KafkaConsumer, KafkaProducer
 from analysis_stream.ingestion.transformer import senti_menti
 import json
-
-consumer = KafkaConsumer('twitch_chat', bootstrap_servers='127.0.0.1:9092', auto_offset_reset='earliest')
 
 class kafka_consumer:
 
     def __init__(
         self, 
         topic_name: str, 
-        bootstrap_server: str, 
+        bootstrap_servers: str, 
         auto_offset_reset: str = "earliest"
         ):
         self.topic_name = topic_name
-        self.bootstrap_server = bootstrap_server
+        self.bootstrap_servers = bootstrap_servers
         self.auto_offset_reset = auto_offset_reset
 
-        self.consumer = KafkaConsumer(topic_name, bootstrap_server, auto_offset_reset)
-
-        self.producer = KafkaProducer(bootstrap_servers=bootstrap_server, acks=1,
-                                 key_serializer=lambda v:json.dumps(v).encode('utf-8'), 
-                                 value_serializer=lambda v:json.dumps(v).encode('utf-8'))
+        self.consumer = KafkaConsumer(self.topic_name, bootstrap_servers=self.bootstrap_servers, auto_offset_reset=self.auto_offset_reset)
+        self.producer = KafkaProducer(bootstrap_servers=bootstrap_servers, acks=1,
+                                 key_serializer=lambda v: json.dumps(v).encode('utf-8'), 
+                                 value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
     def process_messages(self, sentiment_topic="sentiment_topic"):
         try:
@@ -32,3 +28,4 @@ class kafka_consumer:
                 self.producer.send(sentiment_topic, value=sentiment_result_str)
         except Exception as e:
             print(f"Error processing messages: {e}")
+

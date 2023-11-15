@@ -8,21 +8,21 @@ class kafka_producer:
 
     def __init__(
             self, 
-            bootstrap_server: str,
+            bootstrap_servers: str,
             server: str,
             port: int,
             nickname: str,
             token: str,
             channel: str
             ):
-        self.bootstrap_server = bootstrap_server
+        self.bootstrap_servers = bootstrap_servers
         self.server = server
         self.port = port
         self.nickname = nickname
         self.token = token
         self.channel = channel
 
-        producer = KafkaProducer(bootstrap_servers=bootstrap_server, acks=1,
+        producer = KafkaProducer(bootstrap_servers=bootstrap_servers, acks=1,
                                  key_serializer=lambda v:json.dumps(v).encode('utf-8'), 
                                  value_serializer=lambda v:json.dumps(v).encode('utf-8'))
         
