@@ -63,7 +63,7 @@ class kafka_producer:
                     resp = sock.recv(2048).decode('utf-8')  
                     resp_str = demojize(resp).encode('utf-8').decode('utf-8')
                     resp_json = self.parse_resp(resp_str)
-                    self.producer.send(topic=topic, value=resp_json)
+                    self.producer.send(topic=topic, key=resp_json['user'], value=resp_json)
                     
         except KeyboardInterrupt:
             sock.close()
