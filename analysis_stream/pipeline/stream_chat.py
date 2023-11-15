@@ -6,9 +6,8 @@ from analysis_stream.ingestion.producer import *
 from analysis_stream.ingestion.consumer import kafka_consumer
 
 
-
 if __name__ == "__main__":
-
+    
     load_dotenv()
     server = os.environ.get('SERVER')
     port = int(os.environ.get('PORT'))
@@ -21,7 +20,7 @@ if __name__ == "__main__":
             config = yaml.safe_load(yaml_file)
     else:
         raise Exception(f'Missing {yaml_file_path} file.')
-    
+
     kp = kafka_producer(
         bootstrap_server = config.get('topic1').get('bootstrap_server'),
         server = server,
