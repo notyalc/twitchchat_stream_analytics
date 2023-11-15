@@ -22,7 +22,7 @@ if __name__ == "__main__":
         raise Exception(f'Missing {yaml_file_path} file.')
 
     kp = kafka_producer(
-        bootstrap_server = config.get('topic1').get('bootstrap_server'),
+        bootstrap_servers = config.get('topic1').get('bootstrap_servers'),
         server = server,
         port = port,
         nickname = nickname,
@@ -30,11 +30,13 @@ if __name__ == "__main__":
         channel = config.get('channel')
         )
 
-    kp.get_twitch_stream(topic = config.get('topic1').get('name'))
+    # kp.get_twitch_stream(topic = config.get('topic1').get('name'))
 
     kc = kafka_consumer(
-        topic_name = config.get('sentiment_topic').get('name'),
-        bootstrap_server = config.get('sentiment_topic').get('bootstrap_server')
+        topic_name = config.get('topic1').get('name'),
+        bootstrap_servers = config.get('topic1').get('bootstrap_servers'),
+        auto_offset_reset='earliest'
         )
     
     kc.process_messages()
+    
