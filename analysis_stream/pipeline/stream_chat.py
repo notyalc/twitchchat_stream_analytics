@@ -3,6 +3,8 @@ import yaml
 from dotenv import load_dotenv
 from pathlib import Path
 from analysis_stream.ingestion.producer import *
+from analysis_stream.ingestion.consumer import kafka_consumer
+
 
 if __name__ == "__main__":
     
@@ -27,5 +29,12 @@ if __name__ == "__main__":
         token = token,
         channel = config.get('channel')
         )
-    
+
     kp.get_twitch_stream(topic = config.get('topic1').get('name'))
+
+    kc = kafka_consumer(
+        topic_name = config.get('sentiment_topic').get('name'),
+        bootstrap_server = config.get('sentiment_topic').get('bootstrap_server')
+        )
+    
+    kc.process_messages()
