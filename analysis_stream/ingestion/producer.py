@@ -59,10 +59,10 @@ class produce_twitch_chat:
             """
             Create web socket connection with Twitch to receive IRC messages.
             """
-            if channel[0] == '#':
+            if self.channel[0] == '#':
                 pass
             else:
-                channel = '#'+channel
+                self.channel = '#' + self.channel
 
             sock = socket.socket()
             sock.connect((self.server, self.port))

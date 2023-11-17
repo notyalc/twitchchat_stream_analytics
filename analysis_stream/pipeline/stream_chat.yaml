@@ -1,8 +1,6 @@
-channel: fandy
+channel: shanks_ttv
 bootstrap_servers: '127.0.0.1:9092'
 twitch_topic:
   name: 'twitch'
-  bootstrap_servers: '127.0.0.1:9092'
 sentiment_topic:
   name: 'sentiment_topic'
-  bootstrap_servers: '127.0.0.1:9092'

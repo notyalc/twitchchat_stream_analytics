@@ -23,22 +23,25 @@ if __name__ == "__main__":
         raise Exception(f'Missing {yaml_file_path} file.')
 
     producer_config = {
-        'bootstrap.servers': config.get('bootstrap_servers'),
+        'bootstrap_servers': config.get('bootstrap_servers'),
         'key_serializer': lambda v:json.dumps(v).encode('utf-8'), 
         'value_serializer': lambda v:json.dumps(v).encode('utf-8')
     }
 
-    consumer_config = producer_config.copy()
-    consumer_config['auto_offset_reset'] = 'earliest'
+    consumer_config = {
+        'bootstrap_servers': config.get('bootstrap_servers'),
+        'auto_offset_reset': 'earliest'
+    }
 
     kp = KafkaProducer(**producer_config)
 
     kc = KafkaConsumer(
-        topics = config.get('twitch_topic').get('name'),
+        config.get('twitch_topic').get('name'),
         **consumer_config
         )
     
     ptc = produce_twitch_chat(
+        topic = config.get('twitch_topic').get('name'),
         producer = kp,
         server = server,
         port = port,
