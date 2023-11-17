@@ -30,7 +30,7 @@ if __name__ == "__main__":
         channel = config.get('channel')
         )
 
-    # kp.get_twitch_stream(topic = config.get('topic1').get('name'))
+    kp.get_twitch_stream(topic = config.get('topic1').get('name'))
 
     kc = kafka_consumer(
         topic_name = config.get('topic1').get('name'),
