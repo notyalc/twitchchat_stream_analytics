@@ -2,8 +2,9 @@ import os
 import yaml
 from dotenv import load_dotenv
 from pathlib import Path
+from multiprocessing import Process
 from analysis_stream.ingestion.producer import *
-from analysis_stream.ingestion.consumer import kafka_consumer
+from analysis_stream.ingestion.consumer import *
 
 
 if __name__ == "__main__":
@@ -21,22 +22,45 @@ if __name__ == "__main__":
     else:
         raise Exception(f'Missing {yaml_file_path} file.')
 
-    kp = kafka_producer(
-        bootstrap_servers = config.get('topic1').get('bootstrap_servers'),
+    producer_config = {
+        'bootstrap.servers': config.get('bootstrap_servers'),
+        'key_serializer': lambda v:json.dumps(v).encode('utf-8'), 
+        'value_serializer': lambda v:json.dumps(v).encode('utf-8')
+    }
+
+    consumer_config = producer_config.copy()
+    consumer_config['auto_offset_reset'] = 'earliest'
+
+    kp = KafkaProducer(**producer_config)
+
+    kc = KafkaConsumer(
+        topics = config.get('twitch_topic').get('name'),
+        **consumer_config
+        )
+    
+    ptc = produce_twitch_chat(
+        producer = kp,
         server = server,
         port = port,
-        nickname = nickname,
         token = token,
+        nickname = nickname,
         channel = config.get('channel')
-        )
+    )
 
-    # kp.get_twitch_stream(topic = config.get('topic1').get('name'))
+    ps = process_sentiment(
+        consumer = kc,
+        producer = kp,
+        consume_topic = config.get('twitch_topic').get('name'),
+        produce_topic = config.get('sentiment_topic').get('name')
+    )
 
-    kc = kafka_consumer(
-        topic_name = config.get('topic1').get('name'),
-        bootstrap_servers = config.get('topic1').get('bootstrap_servers'),
-        auto_offset_reset='earliest'
-        )
+    # stream twitch chat to topic, process sentiment and produce to 2nd topic in parallel
+
+    stream_chat = Process(target = ptc.get_twitch_stream())
+    stream_sentiment = Process(target = ps.process_messages())
     
-    kc.process_messages()
-    
+    stream_chat.start()
+    stream_sentiment.start()
+
+    stream_chat.join()
+    stream_sentiment.join()

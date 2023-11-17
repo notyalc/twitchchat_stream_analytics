@@ -1,31 +1,42 @@
 from kafka import KafkaConsumer, KafkaProducer
 from analysis_stream.ingestion.transformer import senti_menti
 import json
+from time import sleep
 
-class kafka_consumer:
+class process_sentiment:
+
+    """
+    Consume messages from a kafka topic, analyze sentiment, then produce to another topic
+
+    Args:
+        consumer: kafka consumer
+        producer: kafka producer
+        consume_topic: topic to consume from
+        produce_topic: topic to produce to
+    """
 
     def __init__(
-        self, 
-        topic_name: str, 
-        bootstrap_servers: str, 
-        auto_offset_reset: str = "earliest"
-        ):
-        self.topic_name = topic_name
-        self.bootstrap_servers = bootstrap_servers
-        self.auto_offset_reset = auto_offset_reset
+            self,
+            consumer: KafkaConsumer,
+            producer: KafkaProducer,
+            consume_topic: str,
+            produce_topic: str
+    ):
+        self.consumer = consumer
+        self.consume_topic = consume_topic
+        self.producer = producer
+        self.produce_topic = produce_topic
 
-        self.consumer = KafkaConsumer(self.topic_name, bootstrap_servers=self.bootstrap_servers, auto_offset_reset=self.auto_offset_reset)
-        self.producer = KafkaProducer(bootstrap_servers=bootstrap_servers, acks=1,
-                                 key_serializer=lambda v: json.dumps(v).encode('utf-8'), 
-                                 value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-
-    def process_messages(self, sentiment_topic="sentiment_topic"):
+    def process_messages(self):
         try:
-            for message in self.consumer:
-                twitch_message = json.loads(message.value)
-                sentiment_result = senti_menti(twitch_message)
-                sentiment_result_str = json.dumps(sentiment_result)
-                self.producer.send(sentiment_topic, value=sentiment_result_str)
+            while True:
+                for message in self.consumer:
+                    if message is not None:
+                        twitch_message = json.loads(message.value.replace('\\',''))
+                        sentiment_result = senti_menti(twitch_message)
+                        sentiment_result_str = json.dumps(sentiment_result)
+                        self.producer.send(self.produce_topic, value = sentiment_result_str)
+                    else:
+                        sleep(5)
         except Exception as e:
             print(f"Error processing messages: {e}")
-
