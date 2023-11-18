@@ -24,8 +24,7 @@ class kafka_consumer:
             for message in self.consumer:
                 twitch_message = json.loads(message.value)
                 sentiment_result = senti_menti(twitch_message)
-                sentiment_result_str = json.dumps(sentiment_result)
-                self.producer.send(sentiment_topic, value=sentiment_result_str)
+                self.producer.send(sentiment_topic, value=sentiment_result)
         except Exception as e:
             print(f"Error processing messages: {e}")
 
