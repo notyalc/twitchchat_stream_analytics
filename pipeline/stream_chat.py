@@ -2,8 +2,8 @@ import os
 import yaml
 from dotenv import load_dotenv
 from pathlib import Path
-from analysis_stream.ingestion.producer import *
-from analysis_stream.ingestion.consumer import kafka_consumer
+from ingestion.producer import *
+from ingestion.consumer import kafka_consumer
 
 
 if __name__ == "__main__":
