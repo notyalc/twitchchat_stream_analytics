@@ -18,7 +18,8 @@ with DAG(
     dagrun_timeout=datetime.timedelta(minutes=60),
 ) as dag:
 
-    def load_config(**kwargs):
+    def load_config(**kwargs):zj
+    
         """Load env variables and config"""
         load_dotenv()
         server = os.environ.get('SERVER')
