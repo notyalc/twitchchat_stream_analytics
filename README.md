@@ -63,7 +63,7 @@ The pipeline consists of the following components:
 5. Run the Twitch Chat Data Engineering Pipeline:
 
     ```bash
-    python stream_chat.py
+    python production.py
     ```
     
 ## Improvements
