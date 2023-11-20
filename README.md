@@ -52,8 +52,8 @@ The pipeline consists of the following components:
     Create a `.env` file with the following:
 
     ```env
-    SERVER=<Twitch IRC Server>
-    PORT=<Twitch IRC Port>
+    SERVER='irc.chat.twitch.tv'
+    PORT=6667
     NICKNAME=<Your Twitch Nickname>
     TOKEN=<Your Twitch Authentication Token>
     ```
