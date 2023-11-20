@@ -4,11 +4,14 @@
 
 This data engineering project streams Twitch chat messages, performs sentiment analysis, and stores the processed data in a Kafka topic. The pipeline utilizes Confluent Cloud for Kafka and ClickHouse for data storage. The parsed and sentiment-analyzed data can be visualized using Preset dashboards to observe how the Twitch stream chat evolves over time.
 
+## Solution Architecture
+![Solution Architecture](relative/path/to/twitch_solution_architecture.png)
+
 ## Pipeline Architecture
 
 The pipeline consists of the following components:
 
-1. **Twitch Chat Streamer**: A Python script (`stream_chat.py`) establishes a WebSocket connection with Twitch IRC to receive chat messages. The messages are then parsed and transformed into JSON format before being sent to a Kafka producer.
+1. **Twitch Chat Streamer**: A Python script (`production.py`) establishes a WebSocket connection with Twitch IRC to receive chat messages. The messages are then parsed and transformed into JSON format before being sent to a Kafka producer.
 
 2. **Kafka Producer**: The Kafka producer is responsible for sending the processed chat messages to a specified Kafka topic. The producer configuration, including authentication details, is provided through a configuration file.
 
