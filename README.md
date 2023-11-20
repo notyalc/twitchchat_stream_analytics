@@ -5,7 +5,7 @@
 This data engineering project streams Twitch chat messages, performs sentiment analysis, and stores the processed data in a Kafka topic. The pipeline utilizes Confluent Cloud for Kafka and ClickHouse for data storage. The parsed and sentiment-analyzed data can be visualized using Preset dashboards to observe how the Twitch stream chat evolves over time.
 
 ## Solution Architecture
-![Solution Architecture](relative/path/to/twitch_solution_architecture.png)
+![Solution Architecture](twitch_solution_architecture.png)
 
 ## Pipeline Architecture
 
