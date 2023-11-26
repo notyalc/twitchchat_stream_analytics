@@ -16,7 +16,10 @@ def senti_menti(twitch_message: dict) -> dict:
         twitch_message['sentiment_label'] = label
         twitch_message['sentiment_score'] = score
     
-        return twitch_message
+        if twitch_message is not None:
+            return twitch_message
+        else:
+            pass
 
     except Exception:
         print(f'Model not applied to message:{twitch_message}')
