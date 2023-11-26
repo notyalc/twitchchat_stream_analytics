@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 from kafka import KafkaProducer
 from analysis_stream.config_func import *
 from analysis_stream.transform import *
+import boto3
+
 
 class stream_chat():
      
@@ -20,6 +22,7 @@ class stream_chat():
             token: str,
             channel: str
             ):
+        self.download_env_from_s3()
         self.producer_config = producer_config
         self.topic = topic
         self.server = server
@@ -44,6 +47,22 @@ class stream_chat():
             token: twitch authentication token
             channel: channel to stream
         """
+
+    def download_env_from_s3(self):
+        """
+        Download .env file from S3 and load environment variables.
+        """
+        s3_bucket_name = 'twitch-stream-analytics'
+        s3_env_file_name = '.env'
+        s3 = boto3.client('s3')
+        
+        try:
+            s3.download_file(s3_bucket_name, s3_env_file_name, '.env')
+            print(f"Downloaded .env file from S3: {s3_env_file_name}")
+        except Exception as e:
+            print(f"Error downloading .env file from S3: {e}")
+
+        load_dotenv()
 
     def parse_resp(self, s: str) -> dict:
         """
