@@ -7,6 +7,7 @@ def senti_menti(twitch_message: dict) -> dict:
     Args:
         twitch_message: json containing twitch chat
     """
+
     try:
         classifier = pipeline("sentiment-analysis")
         result = classifier(twitch_message['message'])
@@ -15,11 +16,8 @@ def senti_menti(twitch_message: dict) -> dict:
 
         twitch_message['sentiment_label'] = label
         twitch_message['sentiment_score'] = score
-    
-        if twitch_message is not None:
-            return twitch_message
-        else:
-            pass
+
+        return twitch_message
 
     except Exception:
-        print(f'Model not applied to message:{twitch_message}')
+        pass

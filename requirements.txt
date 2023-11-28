@@ -1,0 +1,5 @@
+emoji==2.8.0
+kafka_python==2.0.2
+python-dotenv==1.0.0
+PyYAML==6.0.1
+transformers==4.35.0

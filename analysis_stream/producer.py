@@ -65,7 +65,7 @@ class stream_chat():
             return chat
 
         except Exception:
-            print(f'Failed to parse {s}.')
+            pass
 
     def get_twitch_stream(self):
         """
